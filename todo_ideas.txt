@@ -15,3 +15,4 @@ POSSIBLE FEATURES:
 
 
 readline treba pogledat
+  za readline: https://stackoverflow.com/questions/15198494/regex-replace-in-multiple-files
