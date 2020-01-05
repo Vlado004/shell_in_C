@@ -26,12 +26,12 @@ int num_built_ins() {
   return sizeof(built_in_str) / sizeof(char *);
 }
 
-int exit_shell(charr** args) {
+int exit_shell(char** args) {
   return 0;
 }
 
-int change_dir(char* args) {
-  int status
+int change_dir(char** args) {
+  int status = 0;
 
   return status;
 }
@@ -44,7 +44,7 @@ int exec_built_in(char** arguments) {
       return (*built_in_func[i])(arguments);
   }
 
-  return -1
+  return -1;
 }
 
 #endif

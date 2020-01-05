@@ -6,7 +6,7 @@
 #include "built_ins.h"
 
 char* readFromConsole() {
-  char* buffer readline("\n>>> ");
+  char* buffer = readline("\n>>> ");
 
   return buffer;
 }
@@ -20,6 +20,7 @@ int execute(char** args) {
   //Izvrsavanje naredbi - nasi programi van patha?
   //provjera aliasa
 
+  int status = 0;
   //Kao prvo gleda za built ins pa onda ostatak
   if ((status = exec_built_in(args)) == -1) {
     pid_t pid, wpid;
