@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "built_ins.h"
 
@@ -10,15 +11,19 @@ char* readFromConsole(void) {
   int c;
 
   if (!buffer) {
-    fprintf(stderr, "lsh: allocation error\n");
+    fprintf(stderr, "Shell: allocation error\n");
     exit(EXIT_FAILURE);
   }
 
+  char cwd[1024], username[1024];
+  getlogin_r(username, 1024);
+  getcwd(cwd, sizeof(cwd));
+
+  fprintf(stdout, "%s@%s$ ", username, cwd); //nezz hoce li ovo radit - I pray
   while (1) {
-    // Read a character
     c = getchar();
 
-    // If we hit EOF, replace it with a null character and return.
+    // Kad bude kraj unosa stavljamo \0 i vracamo string
     if (c == EOF || c == '\n') {
       buffer[position] = '\0';
       return buffer;
@@ -27,12 +32,12 @@ char* readFromConsole(void) {
     }
     position++;
 
-    // If we have exceeded the buffer, reallocate.
+    // Povecavanje buffera
     if (position >= bufsize) {
-      bufsize += LSH_RL_BUFSIZE;
+      bufsize += 1024;
       buffer = realloc(buffer, bufsize);
       if (!buffer) {
-        fprintf(stderr, "lsh: allocation error\n");
+        fprintf(stderr, "Shell: allocation error\n");
         exit(EXIT_FAILURE);
       }
     }
@@ -41,6 +46,32 @@ char* readFromConsole(void) {
 
 char** parseArguments(char* line) {
   //Razdvajanje
+  int bufsize = 64, position = 0;
+  char** arguments = (char**)malloc(bufsize * sizeof(char*));
+  char* buffer;
+
+  if (!arguments) {
+    fprintf(stderr, "shell: allocation error\n");
+    exit(EXIT_FAILURE);
+  }
+
+  while((buffer = strsep(&line, " ")) != NULL) {
+    arguments[position] = buffer;
+    position++;
+
+    if (position >= bufsize) {
+      bufsize += bufsize;
+      arguments = (char**)realloc(arguments, bufsize);
+      if (!arguments) {
+        fprintf(stderr, "shell: allocation error\n");
+        exit(EXIT_FAILURE);
+      }
+    }
+    arguments[position] = NULL;
+    return arguments;
+  }
+
+
 
   return NULL;
 }
@@ -84,12 +115,17 @@ int main(void) {
   //Varijable za obradu podataka
   char* input;
   char** args;
-  int status;
+  int status, i;
 
   //Glavna petlja koja ce se vrtit
   do {
-    input = readFromConsole();//zasad cemo rec da daje bas komandu a ne kobasicu teksta
-    puts(input);
+    i = 0;//for testing
+    input = readFromConsole();
+    args = parseArguments(input);
+    while (args[i] != NULL) { //for testing
+      fprintf(stdout, "%s\n", args[i]);
+      i++;
+    }
     //parsiranje? - Razdvajanje + svasta nesto kasnije
     //Izvedba?
 
