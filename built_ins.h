@@ -36,6 +36,10 @@ int change_dir(char** args) {
   return status;
 }
 
+int help(char** args) {
+  return 0;
+}
+
 int exec_built_in(char** arguments) {
   int i, size = num_built_ins();
 
