@@ -67,13 +67,9 @@ char** parseArguments(char* line) {
         exit(EXIT_FAILURE);
       }
     }
-    arguments[position] = NULL;
-    return arguments;
   }
-
-
-
-  return NULL;
+  arguments[position] = NULL;
+  return arguments;
 }
 
 int execute(char** args) {
@@ -131,7 +127,10 @@ int main(void) {
 
     //oslobadanje (treba vidit kako tocno readline radi)
     free(input);
+    free(args);
   } while (status);
+
+  fprintf(stdout, "Help me");
 
   return 0;
 }
