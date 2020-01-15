@@ -6,6 +6,8 @@
 #include <sys/wait.h>
 #include <stdio.h>
 
+#define ANSI_COLOR_RED     "\x1b[31m"
+
 int change_dir(char **args);
 int help(char **args);
 int exit_shell(char **args);
@@ -32,7 +34,7 @@ int exit_shell(char** args) {
 
 int change_dir(char** args) {
   if (chdir(args[1])){
-    fprintf(stderr, "ERROR, directory '%s' not found\n", args[1]);
+    fprintf(stderr, "%sERROR, directory '%s' not found\n", ANSI_COLOR_RED, args[1]);
   }
   return 0;
 }
