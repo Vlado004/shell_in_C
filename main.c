@@ -49,7 +49,8 @@ char* readFromConsole(void) {
 }
 
 char* switchHome(char *orig) {
-    char[] rep = "~";
+    char* rep = (char*)malloc(sizeof(char)*2);
+    rep = strcpy(rep, "~");
     char* with = getenv("HOME");
     char *result; // the return string
     char *ins;    // the next insert point

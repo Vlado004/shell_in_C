@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
@@ -34,9 +35,11 @@ int exit_shell(char** args) {
 }
 
 int change_dir(char** args) {
-  if (chdir(args[1])){
+  if (!args[1])
+    args[1] = getenv("HOME");
+
+  if (chdir(args[1]))
     fprintf(stderr, "%sERROR%s: directory '%s' not found\n", ANSI_COLOR_RED, ANSI_COLOR_RESET, args[1]);
-  }
   return 0;
 }
 
