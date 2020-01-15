@@ -80,7 +80,7 @@ int execute(char** args) {
 
   int status = 0;
   //Kao prvo gleda za built ins pa onda ostatak
-  if ((status = exec_built_in(args)) == -1) {
+  if ((status = exec_built_in(args)) != 0) {
     pid_t pid, wpid;
     int status;
 
@@ -114,11 +114,13 @@ int main(void) {
   //Glavna petlja koja ce se vrtit
   do {
     input = readFromConsole();
-    args = parseArguments(input);
-    status = execute(args);
+    if (input[0] != '\0') {
+      args = parseArguments(input);
+      status = execute(args);
 
+      free(args);
+    }
     free(input);
-    free(args);
   } while (!status);
 
   return 0;
