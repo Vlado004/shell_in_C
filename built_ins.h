@@ -4,6 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <stdio.h>
 
 int change_dir(char **args);
 int help(char **args);
@@ -30,14 +31,17 @@ int exit_shell(char** args) {
 }
 
 int change_dir(char** args) {
-  return (!chdir(args[1])) ? 0 : 1;
+  if (chdir(args[1])){
+    fprintf(stderr, "ERROR, directory '%s' not found\n", args[1]);
+  }
+  return 0;
 }
 
 int help(char** args) {
-  fprintf(stdout, "This is work in progress shell made for a class.\nList of commands:");
+  fprintf(stdout, "This is a work in progress shell made for a class.\nList of commands:\n");
   int size = num_built_ins(), i;
   for (i = 0; i < size; i++) {
-    fprintf(stdout, "\n%s", built_in_str[i]);
+    fprintf(stdout, "%s\n", built_in_str[i]);
   }
   return 0;
 }
