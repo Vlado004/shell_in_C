@@ -9,7 +9,6 @@ int change_dir(char **args);
 int help(char **args);
 int exit_shell(char **args);
 
-
 char *built_in_str[] = {
   "cd",
   "help",
@@ -27,16 +26,19 @@ int num_built_ins() {
 }
 
 int exit_shell(char** args) {
-  return 0;
+  return 1;
 }
 
 int change_dir(char** args) {
-  int status = 0;
-
-  return status;
+  return (!chdir(args[1])) ? 0 : 1;
 }
 
 int help(char** args) {
+  fprintf(stdout, "This is work in progress shell made for a class.\nList of commands:");
+  int size = num_built_ins(), i;
+  for (i = 0; i < size; i++) {
+    fprintf(stdout, "\n%s", built_in_str[i]);
+  }
   return 0;
 }
 

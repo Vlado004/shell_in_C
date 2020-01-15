@@ -73,7 +73,6 @@ char** parseArguments(char* line) {
 }
 
 int execute(char** args) {
-  //Izvrsavanje naredbi - nasi programi van patha?
   //provjera aliasa
 
   int status = 0;
@@ -103,10 +102,6 @@ int execute(char** args) {
   }
 }
 
-
-
-
-
 int main(void) {
   //Varijable za obradu podataka
   char* input;
@@ -115,19 +110,13 @@ int main(void) {
 
   //Glavna petlja koja ce se vrtit
   do {
-    i = 0;//for testing
     input = readFromConsole();
     args = parseArguments(input);
     status = execute(args);
-    //parsiranje? - Razdvajanje + svasta nesto kasnije
-    //Izvedba?
 
-    //oslobadanje (treba vidit kako tocno readline radi)
     free(input);
     free(args);
   } while (!status);
-
-  fprintf(stdout, "%d", status);
 
   return 0;
 }
