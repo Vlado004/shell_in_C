@@ -4,6 +4,9 @@
 
 #include "built_ins.h"
 
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+
 char* readFromConsole(void) {
   int bufsize = 1024;
   int position = 0;
@@ -11,7 +14,7 @@ char* readFromConsole(void) {
   int c;
 
   if (!buffer) {
-    fprintf(stderr, "Shell: allocation error\n");
+    fprintf(stderr, "%sShell: allocation error\n", ANSI_COLOR_RED);
     exit(EXIT_FAILURE);
   }
 
@@ -19,7 +22,7 @@ char* readFromConsole(void) {
   getlogin_r(username, 1024);
   getcwd(cwd, sizeof(cwd));
 
-  fprintf(stdout, "%s@%s$ ", username, cwd); //nezz hoce li ovo radit - I pray
+  fprintf(stdout, "%s%s@%s$ ", ANSI_COLOR_BLUE, username, cwd);
   while (1) {
     c = getchar();
 
@@ -37,7 +40,7 @@ char* readFromConsole(void) {
       bufsize += 1024;
       buffer = realloc(buffer, bufsize);
       if (!buffer) {
-        fprintf(stderr, "Shell: allocation error\n");
+        fprintf(stderr, "%sShell: allocation error\n", ANSI_COLOR_RED);
         exit(EXIT_FAILURE);
       }
     }
@@ -51,7 +54,7 @@ char** parseArguments(char* line) {
   char* buffer;
 
   if (!arguments) {
-    fprintf(stderr, "shell: allocation error\n");
+    fprintf(stderr, "%sShell: allocation error\n", ANSI_COLOR_RED);
     exit(EXIT_FAILURE);
   }
 
@@ -63,7 +66,7 @@ char** parseArguments(char* line) {
       bufsize += bufsize;
       arguments = (char**)realloc(arguments, bufsize);
       if (!arguments) {
-        fprintf(stderr, "shell: allocation error\n");
+        fprintf(stderr, "%sShell: allocation error\n", ANSI_COLOR_RED);
         exit(EXIT_FAILURE);
       }
     }
