@@ -5,7 +5,8 @@
 #include "built_ins.h"
 
 #define ANSI_COLOR_RED     "\x1b[31m"
-#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
 
 char* readFromConsole(void) {
   int bufsize = 1024;
@@ -14,7 +15,7 @@ char* readFromConsole(void) {
   int c;
 
   if (!buffer) {
-    fprintf(stderr, "%sShell: allocation error\n", ANSI_COLOR_RED);
+    fprintf(stderr, "%sShell%s: allocation error\n", ANSI_COLOR_RED, ANSI_COLOR_RESET);
     exit(EXIT_FAILURE);
   }
 
@@ -22,7 +23,7 @@ char* readFromConsole(void) {
   getlogin_r(username, 1024);
   getcwd(cwd, sizeof(cwd));
 
-  fprintf(stdout, "%s%s@%s$ ", ANSI_COLOR_BLUE, username, cwd);
+  fprintf(stdout, "%s%s@%s$%s ", ANSI_COLOR_YELLOW, username, ANSI_COLOR_RESET, cwd);
   while (1) {
     c = getchar();
 
@@ -40,7 +41,7 @@ char* readFromConsole(void) {
       bufsize += 1024;
       buffer = realloc(buffer, bufsize);
       if (!buffer) {
-        fprintf(stderr, "%sShell: allocation error\n", ANSI_COLOR_RED);
+        fprintf(stderr, "%sShell%s: allocation error\n", ANSI_COLOR_RED, ANSI_COLOR_RESET);
         exit(EXIT_FAILURE);
       }
     }
@@ -54,7 +55,7 @@ char** parseArguments(char* line) {
   char* buffer;
 
   if (!arguments) {
-    fprintf(stderr, "%sShell: allocation error\n", ANSI_COLOR_RED);
+    fprintf(stderr, "%sShell%s: allocation error\n", ANSI_COLOR_RED, ANSI_COLOR_RESET);
     exit(EXIT_FAILURE);
   }
 
@@ -66,7 +67,7 @@ char** parseArguments(char* line) {
       bufsize += bufsize;
       arguments = (char**)realloc(arguments, bufsize);
       if (!arguments) {
-        fprintf(stderr, "%sShell: allocation error\n", ANSI_COLOR_RED);
+        fprintf(stderr, "%sShell%s: allocation error\n", ANSI_COLOR_RED, ANSI_COLOR_RESET);
         exit(EXIT_FAILURE);
       }
     }
@@ -80,7 +81,7 @@ int execute(char** args) {
 
   int status = 0;
   //Kao prvo gleda za built ins pa onda ostatak
-  if ((status = exec_built_in(args)) != 0) {
+  if ((status = exec_built_in(args)) == -1) {
     pid_t pid, wpid;
     int status;
 

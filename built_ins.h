@@ -7,6 +7,7 @@
 #include <stdio.h>
 
 #define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
 
 int change_dir(char **args);
 int help(char **args);
@@ -34,7 +35,7 @@ int exit_shell(char** args) {
 
 int change_dir(char** args) {
   if (chdir(args[1])){
-    fprintf(stderr, "%sERROR, directory '%s' not found\n", ANSI_COLOR_RED, args[1]);
+    fprintf(stderr, "%sERROR%s: directory '%s' not found\n", ANSI_COLOR_RED, ANSI_COLOR_RESET, args[1]);
   }
   return 0;
 }
