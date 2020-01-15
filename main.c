@@ -118,19 +118,16 @@ int main(void) {
     i = 0;//for testing
     input = readFromConsole();
     args = parseArguments(input);
-    while (args[i] != NULL) { //for testing
-      fprintf(stdout, "%s\n", args[i]);
-      i++;
-    }
+    status = execute(args);
     //parsiranje? - Razdvajanje + svasta nesto kasnije
     //Izvedba?
 
     //oslobadanje (treba vidit kako tocno readline radi)
     free(input);
     free(args);
-  } while (status);
+  } while (!status);
 
-  fprintf(stdout, "Help me");
+  fprintf(stdout, "%d", status);
 
   return 0;
 }
