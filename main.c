@@ -52,13 +52,13 @@ char* switchHome(char *orig) {
     char* rep = (char*)malloc(sizeof(char)*2);
     rep = strcpy(rep, "~");
     char* with = getenv("HOME");
-    char *result; // the return string
-    char *ins;    // the next insert point
-    char *tmp;    // varies
-    int len_rep;  // length of rep (the string to remove)
-    int len_with; // length of with (the string to replace rep with)
-    int len_front; // distance between rep and end of last rep
-    int count;    // number of replacements
+    char *result;
+    char *ins;
+    char *tmp;
+    int len_rep;
+    int len_with;
+    int len_front;
+    int count;
 
     // sanity checks and initialization
     if (!orig || !rep)
@@ -81,11 +81,6 @@ char* switchHome(char *orig) {
     if (!result)
         return NULL;
 
-    // first time through the loop, all the variable are set correctly
-    // from here on,
-    //    tmp points to the end of the result string
-    //    ins points to the next occurrence of rep in orig
-    //    orig points to the remainder of orig after "end of rep"
     while (count--) {
         ins = strstr(orig, rep);
         len_front = ins - orig;
