@@ -17,7 +17,7 @@ int exit_shell(char **args);
 
 char *built_in_str[] = {
   "cd",
-  "history"
+  "history",
   "help",
   "exit"
 };
@@ -56,12 +56,13 @@ int help(char** args) {
 }
 
 int readHistory(char** args) {
-  char[1024] buffer;
-  char* path = getenv("HOME");
-  path = strcat(path, "history.log");
+  char buffer[1024];
+  char path[1024];
+  strcpy(path, getenv("HOME"));
+  strcat(path, "/history.log");
   FILE* historyFile = fopen(path, "r");
 
-  while(fscanf(historyFile, "%s", buffer) == 1) {
+  while(fgets(buffer, 1024, historyFile) != NULL) {
     fprintf(stdout, "%s", buffer);
   }
   fclose(historyFile);
@@ -79,13 +80,17 @@ int exec_built_in(char** arguments) {
 }
 
 void addToHistory(char* input) {
-  char* path = getenv("HOME");
-  path = strcat(path, "history.log");
-  FILE* historyFile = fopen(path, "w+");
+  char path[1024];
+  strcpy(path, getenv("HOME"));
+  strcat(path, "/history.log");
+  FILE* historyFile = fopen(path, "a");
+  if (historyFile == NULL) {
+    fprintf(stdout, "ERROR: File couldn't be opened\n");
+  } else {
+    fprintf(historyFile, "%s\n", input);
 
-  fprintf(historyFile, "%s\n", input);
-
-  fclose(historyFile);
+    fclose(historyFile);
+  }
 }
 
 #endif
