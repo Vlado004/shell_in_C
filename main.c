@@ -130,17 +130,15 @@ int execute(char** args) {
     int status;
 
     pid = fork();
-    if (pid == 0) {
-      // dijete
+    if (pid == 0) { // dijete
       if (execvp(args[0], args) == -1) {
-        perror("lsh");
+        perror("\x1b[31mShell:\x1b[0m ");
       }
-      exit(EXIT_FAILURE);
-    } else if (pid < 0) {
-      // neuspjel fork
-      perror("lsh");
-    } else {
-      // roditelj
+
+    } else if (pid < 0) { // neuspjel fork
+      perror("\x1b[31mShell:\x1b[0m ");
+
+    } else {   // roditelj
       do {
         wpid = waitpid(pid, &status, WUNTRACED);
       } while (!WIFEXITED(status) && !WIFSIGNALED(status));
@@ -159,7 +157,8 @@ int main(void) {
   //Glavna petlja koja ce se vrtit
   do {
     input = readFromConsole();
-    if (input[0] != '\0') {
+    if (input[0] != '\0') { //Provjera jel prazan
+      addToHistory(input);
       input = switchHome(input);
       args = parseArguments(input);
       status = execute(args);

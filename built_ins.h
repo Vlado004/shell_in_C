@@ -11,17 +11,20 @@
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
 int change_dir(char **args);
+int readHistory(char **args);
 int help(char **args);
 int exit_shell(char **args);
 
 char *built_in_str[] = {
   "cd",
+  "history"
   "help",
   "exit"
 };
 
 int (*built_in_func[]) (char **) = {
   &change_dir,
+  &readHistory,
   &help,
   &exit_shell
 };
@@ -52,6 +55,18 @@ int help(char** args) {
   return 0;
 }
 
+int readHistory(char** args) {
+  char[1024] buffer;
+  char* path = getenv("HOME");
+  path = strcat(path, "history.log");
+  FILE* historyFile = fopen(path, "r");
+
+  while(fscanf(historyFile, "%s", buffer) == 1) {
+    fprintf(stdout, "%s", buffer);
+  }
+  fclose(historyFile);
+}
+
 int exec_built_in(char** arguments) {
   int i, size = num_built_ins();
 
@@ -61,6 +76,16 @@ int exec_built_in(char** arguments) {
   }
 
   return -1;
+}
+
+void addToHistory(char* input) {
+  char* path = getenv("HOME");
+  path = strcat(path, "history.log");
+  FILE* historyFile = fopen(path, "w+");
+
+  fprintf(historyFile, "%s\n", input);
+
+  fclose(historyFile);
 }
 
 #endif
