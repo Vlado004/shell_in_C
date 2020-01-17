@@ -97,15 +97,33 @@ char** parseArguments(char* line) {
   int bufsize = 64, position = 0;
   char** arguments = (char**)malloc(bufsize * sizeof(char*));
   char* buffer;
+  char* quotedBuffer;
+  bool quote = false;
 
   if (!arguments) {
     fprintf(stderr, "%sShell%s: allocation error\n", ANSI_COLOR_RED, ANSI_COLOR_RESET);
     exit(EXIT_FAILURE);
   }
 
-  while((buffer = strsep(&line, " ")) != NULL) {
-    arguments[position] = buffer;
-    position++;
+  while((buffer = strsep(&line, " ")) != NULL) { //flag koji mi sve strpa u jedan te isti kurac od " do ", provjerit jel prvi znak " pa sve dok zadnji znak nebude " strpat u isti kurac
+    if (buffer[0] == '"') {
+      quotedBuffer = strcpy(quotedBuffer, buffer);
+      quote = true;
+
+    } else if (buffer[strlen(buffer) - 1] == '"') {
+      quotedBuffer = strcat(quotedBuffer, buffer);
+      arguments[position] = quotedbuffer;
+      position++;
+      quote = false;
+
+    } else if (quote) {
+      quotedBuffer = strcat(quotedBuffer, buffer);
+
+    } else {
+      arguments[position] = buffer;
+      position++;
+
+    }
 
     if (position >= bufsize) {
       bufsize += bufsize;
