@@ -98,7 +98,7 @@ char** parseArguments(char* line) {
   int bufsize = 64, position = 0;
   char** arguments = (char**)malloc(bufsize * sizeof(char*));
   char* buffer;
-  char* quotedBuffer;
+  char* quotedBuffer = strcpy(quotedBuffer, "");
   bool quote = false;
 
   if (!arguments) {
@@ -108,22 +108,28 @@ char** parseArguments(char* line) {
 
   while((buffer = strsep(&line, " ")) != NULL) { //flag koji mi sve strpa u jedan te isti kurac od " do ", provjerit jel prvi znak " pa sve dok zadnji znak nebude " strpat u isti kurac
     if (buffer[0] == '"') {
-      quotedBuffer = strcpy(quotedBuffer, buffer);
       quote = true;
 
-    } else if (buffer[strlen(buffer) - 1] == '"') {
-      quotedBuffer = strcat(quotedBuffer, buffer);
-      arguments[position] = quotedBuffer;
-      position++;
-      quote = false;
-
-    } else if (quote) {
+    }
+    if (quote) {
       quotedBuffer = strcat(quotedBuffer, buffer);
 
-    } else {
+      if (buffer[strlen(buffer) - 2] == '"') {
+        quotedBuffer[strlen(quotedBuffer) - 1] = '\0';
+//        quotedBuffer = strcpy(quotedBuffer, quotedBuffer + 1);
+        arguments[position] = quotedBuffer;
+//        quotedBuffer = "";
+        position++;
+        quote = false;
+
+      } else {
+        quotedBuffer = strcat(quotedBuffer, " ");
+
+      }
+
+    }  else {
       arguments[position] = buffer;
       position++;
-
     }
 
     if (position >= bufsize) {
