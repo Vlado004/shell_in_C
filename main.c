@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 #include "built_ins.h"
 
@@ -112,7 +113,7 @@ char** parseArguments(char* line) {
 
     } else if (buffer[strlen(buffer) - 1] == '"') {
       quotedBuffer = strcat(quotedBuffer, buffer);
-      arguments[position] = quotedbuffer;
+      arguments[position] = quotedBuffer;
       position++;
       quote = false;
 
