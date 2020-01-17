@@ -114,9 +114,9 @@ char** parseArguments(char* line) {
     if (quote) {
       quotedBuffer = strcat(quotedBuffer, buffer);
 
-      if (buffer[strlen(buffer) - 2] == '"') {
+      if (buffer[strlen(buffer) - 1] == '"') {
         quotedBuffer[strlen(quotedBuffer) - 1] = '\0';
-//        quotedBuffer = strcpy(quotedBuffer, quotedBuffer + 1);
+        quotedBuffer = strcpy(quotedBuffer, quotedBuffer + 1);
         arguments[position] = quotedBuffer;
 //        quotedBuffer = "";
         position++;
